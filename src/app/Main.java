@@ -366,10 +366,11 @@ public class Main extends JPanel {
         try {           
             String wbName = targetExcelFile.getName();
             String fileExt = wbName.substring(wbName.lastIndexOf("."));
+            String wbTitle = wbName.substring(0,wbName.lastIndexOf("."));
             
             outputConsoleLogsBreakline("");
             LOGGER.info(() -> "Currently processing: ");
-            LOGGER.info(() -> "Excel Workbook Name: "+wbName);
+            LOGGER.info(() -> "Excel Workbook Name: "+wbTitle);
             LOGGER.info(() -> "File Extension: "+fileExt);
             
             Workbook workbook = null;
@@ -422,7 +423,7 @@ public class Main extends JPanel {
                 updateLogs();
             }
             
-            File outputExcelFile = new File(wbName+"_Unprotected"+fileExt);
+            File outputExcelFile = new File(wbTitle+"_Unprotected"+fileExt);
             try ( // Output new unprotected file
                 FileOutputStream out = new FileOutputStream(outputExcelFile)) {
                 workbook.write(out);
