@@ -360,6 +360,10 @@ public class Main extends JPanel {
         jButtonRemoveSelectedFiles.setEnabled(true);
         jButtonResetAll.setEnabled(true);
         jButtonSelectInputFiles.setEnabled(true);
+        
+        for(File f:OUTPUT_FILES) {
+            f.delete();
+        }
     }
     
     private void unprotectExcelFile(File targetExcelFile) {
@@ -423,14 +427,14 @@ public class Main extends JPanel {
                 updateLogs();
             }
             
-            File outputExcelFile = new File(wbTitle+"_Unprotected"+fileExt);
+            File outputExcelFile = new File(wbTitle+"_(Unprotected)"+fileExt);
             try ( // Output new unprotected file
                 FileOutputStream out = new FileOutputStream(outputExcelFile)) {
                 workbook.write(out);
                 out.flush();
                 out.close();
             }
-            OUTPUT_FILES.add(outputExcelFile);
+            OUTPUT_FILES.add(outputExcelFile);   
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             outputConsoleLogsBreakline("");
