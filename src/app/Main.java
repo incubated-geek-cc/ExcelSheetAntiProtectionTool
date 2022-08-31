@@ -16,6 +16,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -61,6 +63,7 @@ public class Main extends JPanel {
     private static JScrollPane JSCROLL_PANEL_OUTPUT_LOGS;
     
     private JFileChooser FILE_CHOOSER;
+    private JFileChooser saveFileChooser;
     
     private static JLabel USER_NOTICE_1;
     private static JLabel USER_NOTICE_2;
@@ -321,7 +324,7 @@ public class Main extends JPanel {
         LOGGER.info(() -> "Proceeding to generate ZIP archieve.");
         outputConsoleLogsBreakline("");
         updateLogs();
-        
+
         outputArchiveZip = new File("processedFileOutputs_" + getCurrentTimeStamp() + ".zip");
         try (FileOutputStream fos = new FileOutputStream(outputArchiveZip)) {
             ZipOutputStream zipOut = new ZipOutputStream(fos);
@@ -342,27 +345,65 @@ public class Main extends JPanel {
             }
             zipOut.close();
             
-            outputConsoleLogsBreakline("");
-            outputConsoleLogsBreakline("Overall Status: Success");
-            outputConsoleLogsBreakline("Output ZIP arhive has been saved as: " +  outputArchiveZip.getName());
-            outputConsoleLogsBreakline("");
-            updateLogs();
-            
-            Desktop.getDesktop().open(outputArchiveZip);
+            saveFileChooser = new JFileChooser();
+            saveFileChooser.setDialogTitle("Save Output As...");
+            saveFileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+
+            saveFileChooser.setSelectedFile(outputArchiveZip);
+            saveFileChooser.setFileFilter(new FileNameExtensionFilter("ZIP (*.zip)", "zip"));
+
+            int option = saveFileChooser.showSaveDialog(APP_FRAME);
+            if (option == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = saveFileChooser.getSelectedFile();
+                if (selectedFile != null) {
+                    if (!selectedFile.getName().toLowerCase().endsWith(".zip")) {
+                        selectedFile = new File(selectedFile.getParentFile(), selectedFile.getName() + ".zip");
+                    }
+                    copy(outputArchiveZip, selectedFile);
+                    outputConsoleLogsBreakline("");
+                    outputConsoleLogsBreakline("Overall Status: Success");
+                    outputConsoleLogsBreakline("Output ZIP arhive has been saved as: " +  outputArchiveZip.getName());
+                    outputConsoleLogsBreakline("");
+                    updateLogs();
+                    if(!outputArchiveZip.getAbsolutePath().equalsIgnoreCase(selectedFile.getAbsolutePath())) {
+                        outputArchiveZip.delete();
+                    }
+                    Desktop.getDesktop().open(selectedFile);
+                }
+            }
         } catch (FileNotFoundException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             updateLogs();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             updateLogs();
+        } finally {
+            jButtonRunProcess.setEnabled(true);
+            jButtonRemoveSelectedFiles.setEnabled(true);
+            jButtonResetAll.setEnabled(true);
+            jButtonSelectInputFiles.setEnabled(true);
+
+            for(File f:OUTPUT_FILES) {
+                f.delete();
+            }
         }
-        jButtonRunProcess.setEnabled(true);
-        jButtonRemoveSelectedFiles.setEnabled(true);
-        jButtonResetAll.setEnabled(true);
-        jButtonSelectInputFiles.setEnabled(true);
-        
-        for(File f:OUTPUT_FILES) {
-            f.delete();
+    }
+    
+    private void copy(File src, File dest) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(src);
+            os = new FileOutputStream(dest);
+            // buffer size 1K
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = is.read(buf)) > 0) {
+                os.write(buf, 0, bytesRead);
+            }
+        } finally {
+            is.close();
+            os.close();
         }
     }
     
