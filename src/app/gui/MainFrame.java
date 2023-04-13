@@ -1,4 +1,4 @@
-package app;
+package app.gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
@@ -41,7 +41,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class Main extends JPanel {
+public class MainFrame extends JPanel {
     
     private static JLabel jLabelTipsNInfoTitle;
     private static JLabel jLabelUploadListTitle;
@@ -90,7 +90,7 @@ public class Main extends JPanel {
     
     private static Border etchedBorder = new EtchedBorder(EtchedBorder.RAISED);
     
-    public Main() {
+    public MainFrame() {
         LOGGER.setUseParentHandlers(false);
         LOGGER.setLevel(Level.ALL);
         LOGGER.addHandler(new TextAreaHandler(new TextAreaOutputStream(LOG_TEXT_AREA)));
@@ -550,7 +550,7 @@ public class Main extends JPanel {
                     LOG_TEXT_AREA.setFont(logFont);
                     
                     APP_FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    APP_FRAME.getContentPane().add(new Main());
+                    APP_FRAME.getContentPane().add(new MainFrame());
                     APP_FRAME.pack();
                     
                     // set to center and middle of screen

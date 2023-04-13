@@ -1,4 +1,4 @@
-package app;
+package app.gui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
