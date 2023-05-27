@@ -1,12 +1,12 @@
 # ExcelSheetAntiProtectionTool
 
-<img src='https://miro.medium.com/max/1050/1*yTTLl2nCdoT99XaSZMm-lw.png' alt='HTML5 Image Display' height='400' />
+<img src='https://raw.githubusercontent.com/incubated-geek-cc/ExcelSheetAntiProtectionTool/main/cover.png' alt='HTML5 Image Display' height='400' />
 
 🧰 Standalone portable application was built with <strong>Java 1.8</strong>. Rationale of development was for convenience and attempts at creating tools to boost overall work productivity.
 
 ## ℹ Implementation Overview
 
-<img src='https://miro.medium.com/max/1050/1*ZfhjDblAanNnf6ltMVjcYA.png' alt='Image Display' height='400' />
+<img src='https://raw.githubusercontent.com/incubated-geek-cc/ExcelSheetAntiProtectionTool/main/swing_app_steps.png' alt='Image Display' height='400' />
 
 ---
 
